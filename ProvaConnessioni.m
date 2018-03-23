@@ -9,9 +9,9 @@ stopheader = [21 221 23]
 cmd = 1;
 subcmd = 0;
 
-payload = zeros(1,13,'int32');
+% payload = zeros(1,13,'int32');
 
-payload(1) = 10          % numero di pezzi per ogni pallet
+payload(1) = 2         % numero di pezzi per ogni pallet
 payload(2)= 1           % numero di pallet
 payload(3) = 1          % numero di cicli che il robot deve fare
 
@@ -32,9 +32,9 @@ payload(13) = 50    % punto di rilascio, asse Z
 
 
 % PL = typecast(payload,'uint8')
-PL = zeros(1,52,'uint8')
+PL = zeros(1,13*8,'uint8')
 for i=1:13
-    PL((i-1)*4+1:(i-1)*4+4)= fliplr(typecast(payload(i),'uint8'))
+    PL((i-1)*8+1:(i-1)*8+8)= fliplr(typecast(payload(i),'uint8'))
 end
 data = [uint8(startheader) uint8([cmd subcmd]) PL uint8(stopheader)]
 
