@@ -1,0 +1,54 @@
+% PROVA INVIO INFORMAZIONI A ACE
+
+con = tcpip('127.0.0.1',4001,'NetworkRole', 'client')
+
+fopen(con)
+
+startheader =[11 121 13 ] %+cmd
+stopheader = [21 221 23]
+cmd = 1;
+subcmd = 0;
+
+data = zeros(1,13,'int32');
+data = typecast(data,'uint8')
+data = [uint8(startheader) uint8([cmd subcmd]) data]
+data = [data uint8(stopheader)]
+
+
+% data = fliplr(data)
+
+fwrite(con,data)
+% typecast(fliplr(),'uint8')
+%% 3
+data(4)=2;
+fwrite(con,data)
+%%
+
+payload = zeros(1,13,'int32');
+
+payload(1) = 10          % numero di pezzi per ogni pallet
+payload(1) = np = 3           % numero di pallet
+payload(1) = nc = 10          % numero di cicli che il robot deve fare
+
+payload(1) = alp = 20     % inclinazione dei pallet rispetto la y del frame della base del robot
+
+payload(1) = dz = 10          % distanza tra i pezzi sul singolo pallet (lungo l'asse y del frame definito sul primo pezzo del pallet)
+payload(1) = dp = 100     % distanza tra i pallet (lungo l'asse x del frame definito sul primo pezzo del pallet)
+
+payload(1) = h = 100          % altezza dell'approach sul singolo pezzo
+
+payload(1) = pin_x = 300    % punto iniziale, asse X
+payload(1) = pin_y = 300    % punto iniziale, asse Y
+payload(1) = pin_z = 0      % punto iniziale, asse Z
+
+payload(1) = pend_x = 400         % punto di rilascio, asse X
+payload(1) = pend_y = -400        % punto di rilascio, asse Y
+pend_z = 50    % punto di rilascio, asse Z
+
+% payload = [nz np  ]
+
+
+%%
+
+
+fread(con,1)
